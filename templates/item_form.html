@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block title %}{% if item %}Edit activity{% else %}New activity{% endif %}{% endblock %}
+{% block main %}
+    <div class="container app-page narrow-page">
+        <a class="back-link" href="{{ url_for('course_detail', course_id=course.id) }}">← {{ course.name }}</a>
+        <div class="panel mt-3">
+            <h1>{% if item %}Edit activity{% else %}Add activity{% endif %}</h1>
+            <p class="text-secondary">Use this for homework, quizzes, exams, labs, projects, or any other work.</p>
+            <form method="post" class="mt-4">
+                <label class="form-label" for="title">Title</label>
+                <input class="form-control form-control-lg mb-3" id="title" name="title" value="{{ item.title if item else '' }}" required autofocus>
+                <div class="row g-3">
+                    <div class="col-md-6"><label class="form-label" for="category_id">Category</label><select class="form-select" id="category_id" name="category_id"><option value="">Uncategorized</option>{% for category in categories %}<option value="{{ category.id }}" {% if item and item.category_id == category.id %}selected{% endif %}>{{ category.name }}</option>{% endfor %}</select></div>
+                    <div class="col-md-6"><label class="form-label" for="due_date">Due date</label><input class="form-control" id="due_date" name="due_date" type="date" value="{{ item.due_date if item and item.due_date else '' }}"></div>
+                    <div class="col-md-6"><label class="form-label" for="score">Points earned</label><input class="form-control" id="score" name="score" type="number" min="0" step="0.01" value="{{ item.score if item and item.score is not none else '' }}" placeholder="Optional"></div>
+                    <div class="col-md-6"><label class="form-label" for="max_score">Maximum points</label><input class="form-control" id="max_score" name="max_score" type="number" min="0.01" step="0.01" value="{{ item.max_score if item and item.max_score is not none else '' }}" placeholder="Optional"></div>
+                </div>
+                <label class="form-label mt-3" for="notes">Notes</label>
+                <textarea class="form-control" id="notes" name="notes" rows="4">{{ item.notes if item else '' }}</textarea>
+                <div class="form-check mt-3"><input class="form-check-input" id="completed" name="completed" type="checkbox" {% if item and item.completed %}checked{% endif %}><label class="form-check-label" for="completed">Completed</label></div>
+                <button class="btn btn-accent mt-4" type="submit">{% if item %}Save changes{% else %}Add activity{% endif %}</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

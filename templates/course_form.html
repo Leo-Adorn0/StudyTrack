@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block title %}{% if course %}Edit course{% else %}New course{% endif %}{% endblock %}
+{% block main %}
+    <div class="container app-page narrow-page">
+        <a class="back-link" href="{% if course %}{{ url_for('course_detail', course_id=course.id) }}{% else %}{{ url_for('courses') }}{% endif %}">← Back</a>
+        <div class="panel mt-3">
+            <h1>{% if course %}Edit course{% else %}Create a course{% endif %}</h1>
+            <p class="text-secondary">Choose a flexible grading method. You can add custom categories afterward.</p>
+            <form method="post" class="mt-4">
+                <label class="form-label" for="name">Course name</label>
+                <input class="form-control form-control-lg mb-3" id="name" name="name" value="{{ course.name if course else '' }}" placeholder="e.g. Calculus II" required autofocus>
+                <label class="form-label" for="grading_mode">Grading method</label>
+                <select class="form-select form-select-lg mb-3" id="grading_mode" name="grading_mode">
+                    <option value="weighted" {% if not course or course.grading_mode == 'weighted' %}selected{% endif %}>Weighted categories (percentages)</option>
+                    <option value="points" {% if course and course.grading_mode == 'points' %}selected{% endif %}>Total points</option>
+                </select>
+                <label class="form-label" for="color">Course color</label>
+                <input class="form-control form-control-color mb-4" id="color" name="color" type="color" value="{{ course.color if course else '#6c63ff' }}">
+                <button class="btn btn-accent" type="submit">{% if course %}Save changes{% else %}Create course{% endif %}</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

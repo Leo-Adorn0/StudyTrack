@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block main %}
+    <div class="container app-page">
+        <div class="page-heading">
+            <div>
+                <span class="eyebrow dark">OVERVIEW</span>
+                <h1>Keep moving forward.</h1>
+                <p>Your workload and progress at a glance.</p>
+            </div>
+            <a class="btn btn-accent" href="{{ url_for('new_course') }}">+ New course</a>
+        </div>
+
+        <section class="stats-grid">
+            <article class="stat-card"><span>Total activities</span><strong>{{ total }}</strong></article>
+            <article class="stat-card"><span>Completed</span><strong>{{ completed }}</strong></article>
+            <article class="stat-card danger-stat"><span>Overdue</span><strong>{{ overdue }}</strong></article>
+            <article class="stat-card"><span>Progress</span><strong>{{ progress }}%</strong><div class="progress mt-2"><div class="progress-bar" style="width: {{ progress }}%"></div></div></article>
+        </section>
+
+        <div class="row g-4 mt-1">
+            <section class="col-lg-7">
+                <div class="panel h-100">
+                    <div class="panel-heading"><h2>Your courses</h2><a href="{{ url_for('courses') }}">View all</a></div>
+                    {% if courses %}
+                        <div class="course-list">
+                            {% for course in courses %}
+                                <a class="course-row" href="{{ url_for('course_detail', course_id=course.id) }}">
+                                    <span class="course-color" style="background: {{ course.color }}"></span>
+                                    <span class="flex-grow-1"><strong>{{ course.name }}</strong><small>{{ course.grading_mode | title }} grading</small></span>
+                                    <span class="grade-pill">{% if course.grade is not none %}{{ "%.1f" | format(course.grade) }}%{% else %}No grades{% endif %}</span>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="empty-state"><h3>No courses yet</h3><p>Create your first course to start planning.</p><a class="btn btn-accent" href="{{ url_for('new_course') }}">Create course</a></div>
+                    {% endif %}
+                </div>
+            </section>
+            <section class="col-lg-5">
+                <div class="panel h-100">
+                    <div class="panel-heading"><h2>Due soon</h2><a href="{{ url_for('calendar_view') }}">Calendar</a></div>
+                    {% if upcoming %}
+                        <div class="upcoming-list">
+                            {% for item in upcoming %}
+                                <div class="upcoming-item {% if item.due_date < today %}overdue{% endif %}">
+                                    <span class="course-color" style="background: {{ item.course_color }}"></span>
+                                    <div><strong>{{ item.title }}</strong><small>{{ item.course_name }} · {{ item.due_date }}</small></div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="empty-state"><h3>Nothing urgent</h3><p>Your next two weeks are clear.</p></div>
+                    {% endif %}
+                </div>
+            </section>
+        </div>
+    </div>
+{% endblock %}

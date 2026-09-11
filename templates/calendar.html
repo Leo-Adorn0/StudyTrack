@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% block title %}Calendar{% endblock %}
+{% block main %}
+    <div class="container app-page">
+        <div class="page-heading"><div><span class="eyebrow dark">PLAN AHEAD</span><h1>Calendar</h1><p>Every dated activity, organized by month.</p></div><div class="calendar-controls"><button class="btn btn-outline-secondary" id="previous-month" type="button">←</button><button class="btn btn-outline-secondary" id="today-month" type="button">Today</button><button class="btn btn-outline-secondary" id="next-month" type="button">→</button></div></div>
+        <section class="panel calendar-panel">
+            <h2 id="calendar-title"></h2>
+            <div class="calendar-weekdays"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div>
+            <div id="calendar-grid" class="calendar-grid"></div>
+        </section>
+    </div>
+    <script>window.studyTrackCalendarItems = {{ calendar_items | tojson }};</script>
+{% endblock %}

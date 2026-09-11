@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+{% block title %}Plan, learn, progress{% endblock %}
+{% block main %}
+    <section class="landing-shell">
+        <div class="landing-glow glow-one"></div>
+        <div class="landing-glow glow-two"></div>
+        <div class="container position-relative">
+            <nav class="landing-nav">
+                <a class="navbar-brand fw-bold text-white" href="/">
+                    <span class="brand-mark">S</span> StudyTrack
+                </a>
+                <div class="d-flex gap-2">
+                    <a class="btn btn-ghost" href="{{ url_for('login') }}">Log in</a>
+                    <a class="btn btn-accent" href="{{ url_for('register') }}">Create account</a>
+                </div>
+            </nav>
+            <div class="row align-items-center hero-row">
+                <div class="col-lg-7">
+                    <span class="eyebrow">A calmer way to stay on track</span>
+                    <h1 class="display-3 fw-bold mt-3">Your classes, grades, and deadlines in one place.</h1>
+                    <p class="hero-copy">Build a grading system that matches any professor, remember every assignment, and see your progress clearly.</p>
+                    <div class="d-flex flex-wrap gap-3 mt-4">
+                        <a class="btn btn-accent btn-lg" href="{{ url_for('register') }}">Create free account</a>
+                        <form action="{{ url_for('guest') }}" method="post">
+                            <button class="btn btn-ghost btn-lg" type="submit">Try as guest</button>
+                        </form>
+                    </div>
+                    <p class="small text-white-50 mt-3">Guest data stays with this browser session. Create an account to keep it.</p>
+                </div>
+                <div class="col-lg-5 mt-5 mt-lg-0">
+                    <div class="preview-card glass-card">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div>
+                                <span class="muted-label">TODAY'S PROGRESS</span>
+                                <div class="display-5 fw-bold">72%</div>
+                            </div>
+                            <div class="progress-ring">72</div>
+                        </div>
+                        <div class="mini-task"><span class="task-dot purple"></span>Calculus quiz <strong>Today</strong></div>
+                        <div class="mini-task"><span class="task-dot cyan"></span>Programming lab <strong>Tomorrow</strong></div>
+                        <div class="mini-task done"><span class="task-dot green"></span>History notes <strong>Done</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends "layout.html" %}
+{% block title %}{{ course.name }}{% endblock %}
+{% block main %}
+    <div class="container app-page">
+        <a class="back-link" href="{{ url_for('courses') }}">← All courses</a>
+        <div class="course-hero mt-3" style="--course-color: {{ course.color }}">
+            <div><span class="eyebrow">{{ course.grading_mode | upper }} GRADING</span><h1>{{ course.name }}</h1></div>
+            <div class="d-flex gap-2"><a class="btn btn-light" href="{{ url_for('new_item', course_id=course.id) }}">+ Activity</a><a class="btn btn-outline-light" href="{{ url_for('edit_course', course_id=course.id) }}">Edit</a></div>
+        </div>
+
+        <div class="row g-4 mt-1">
+            <section class="col-lg-8">
+                <div class="panel">
+                    <div class="panel-heading"><h2>Activities</h2><a href="{{ url_for('new_item', course_id=course.id) }}">Add new</a></div>
+                    {% if items %}
+                        <div class="table-responsive"><table class="table activity-table align-middle"><thead><tr><th>Status</th><th>Activity</th><th>Due</th><th>Grade</th><th></th></tr></thead><tbody>
+                            {% for item in items %}
+                                <tr class="{% if item.completed %}completed-row{% elif item.due_date and item.due_date < today %}overdue-row{% endif %}">
+                                    <td><form action="{{ url_for('toggle_item', item_id=item.id) }}" method="post"><button class="status-button" type="submit" aria-label="Toggle completion">{% if item.completed %}✓{% else %}○{% endif %}</button></form></td>
+                                    <td><strong>{{ item.title }}</strong><small>{{ item.category_name or 'Uncategorized' }}</small></td>
+                                    <td>{{ item.due_date or '—' }}</td>
+                                    <td>{% if item.score is not none %}{{ "%g" | format(item.score) }}/{{ "%g" | format(item.max_score) }}{% else %}—{% endif %}</td>
+                                    <td><div class="d-flex gap-2 justify-content-end"><a class="btn btn-sm btn-outline-secondary" href="{{ url_for('edit_item', item_id=item.id) }}">Edit</a><form action="{{ url_for('delete_item', item_id=item.id) }}" method="post" data-confirm="Delete this activity?"><button class="btn btn-sm btn-outline-danger" type="submit">Delete</button></form></div></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody></table></div>
+                    {% else %}
+                        <div class="empty-state"><h3>No activities yet</h3><p>Add an assignment, quiz, exam, lab, or anything your professor grades.</p></div>
+                    {% endif %}
+                </div>
+
+                <div class="panel mt-4">
+                    <div class="panel-heading"><h2>Course notes</h2></div>
+                    <form action="{{ url_for('save_notes', course_id=course.id) }}" method="post">
+                        <textarea class="form-control notes-area" name="notes" rows="7" placeholder="Lecture reminders, useful links, study ideas...">{{ course.notes }}</textarea>
+                        <button class="btn btn-accent mt-3" type="submit">Save notes</button>
+                    </form>
+                </div>
+            </section>
+
+            <aside class="col-lg-4">
+                <div class="panel grade-panel">
+                    <span class="muted-label">CURRENT GRADE</span>
+                    <div class="big-grade">{% if grade is not none %}{{ "%.1f" | format(grade) }}%{% else %}—{% endif %}</div>
+                    <p class="text-secondary">Based only on activities with grades.</p>
+                    {% for entry in breakdown %}<div class="grade-breakdown"><span>{{ entry.name }} <small>{{ "%g" | format(entry.weight) }}%</small></span><strong>{{ "%.1f" | format(entry.average) }}%</strong></div>{% endfor %}
+                </div>
+
+                <div class="panel mt-4">
+                    <div class="panel-heading"><h2>Categories</h2><span class="weight-total {% if course.grading_mode == 'weighted' and weight_total != 100 %}warning{% endif %}">{{ "%g" | format(weight_total) }}%</span></div>
+                    {% if course.grading_mode == 'weighted' and weight_total != 100 %}<p class="small text-warning-emphasis">For a complete weighted setup, category weights should total 100%.</p>{% endif %}
+                    {% for category in categories %}
+                        <div class="category-row"><span>{{ category.name }}</span><span>{{ "%g" | format(category.weight) }}%</span><form action="{{ url_for('delete_category', category_id=category.id) }}" method="post" data-confirm="Delete this category?"><button class="icon-delete" type="submit">×</button></form></div>
+                    {% else %}<p class="text-secondary small">No categories created.</p>{% endfor %}
+                    <form action="{{ url_for('add_category', course_id=course.id) }}" method="post" class="category-form mt-3">
+                        <input class="form-control" name="name" placeholder="Category name" required>
+                        <input class="form-control" name="weight" type="number" min="0" max="100" step="0.1" placeholder="Weight %" value="0" required>
+                        <button class="btn btn-outline-accent" type="submit">Add</button>
+                    </form>
+                    {% if course.grading_mode == 'points' %}<p class="small text-secondary mt-2">Weights are ignored in points mode; categories still organize your work.</p>{% endif %}
+                </div>
+
+                <form action="{{ url_for('delete_course', course_id=course.id) }}" method="post" data-confirm="Delete this course and all of its activities?">
+                    <button class="btn btn-link text-danger mt-3" type="submit">Delete course</button>
+                </form>
+            </aside>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block title %}Courses{% endblock %}
+{% block main %}
+    <div class="container app-page">
+        <div class="page-heading"><div><span class="eyebrow dark">ORGANIZE</span><h1>Courses</h1><p>Each course can use its own grading system.</p></div><a class="btn btn-accent" href="{{ url_for('new_course') }}">+ New course</a></div>
+        <div class="row g-4">
+            {% for course in courses %}
+                <div class="col-md-6 col-xl-4">
+                    <a class="course-card" href="{{ url_for('course_detail', course_id=course.id) }}">
+                        <span class="course-banner" style="background: {{ course.color }}"></span>
+                        <span class="course-card-body"><span class="muted-label">{{ course.grading_mode | upper }} GRADING</span><strong>{{ course.name }}</strong><span>Open course →</span></span>
+                    </a>
+                </div>
+            {% else %}
+                <div class="empty-state panel"><h2>No courses yet</h2><p>Add a course and choose how its professor calculates grades.</p></div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

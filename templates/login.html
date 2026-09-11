@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block title %}Log in{% endblock %}
+{% block main %}
+    <div class="auth-page">
+        <div class="auth-card">
+            <a class="brand-center" href="{{ url_for('landing') }}"><span class="brand-mark">S</span> StudyTrack</a>
+            <h1>Welcome back</h1>
+            <p class="text-secondary">Continue building better study habits.</p>
+            <form method="post" class="text-start mt-4">
+                <label class="form-label" for="username">Username</label>
+                <input class="form-control form-control-lg mb-3" id="username" name="username" autocomplete="username" required autofocus>
+                <label class="form-label" for="password">Password</label>
+                <input class="form-control form-control-lg mb-4" id="password" name="password" type="password" autocomplete="current-password" required>
+                <button class="btn btn-accent btn-lg w-100" type="submit">Log in</button>
+            </form>
+            <p class="mt-4 mb-0 text-secondary">New here? <a href="{{ url_for('register') }}">Create an account</a></p>
+        </div>
+    </div>
+{% endblock %}

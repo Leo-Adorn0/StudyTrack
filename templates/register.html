@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block title %}Create account{% endblock %}
+{% block main %}
+    <div class="auth-page">
+        <div class="auth-card">
+            <a class="brand-center" href="{{ url_for('landing') }}"><span class="brand-mark">S</span> StudyTrack</a>
+            <h1>{% if current_user and current_user.is_guest %}Save your progress{% else %}Create your account{% endif %}</h1>
+            <p class="text-secondary">Use your StudyTrack data again whenever you return.</p>
+            <form method="post" class="text-start mt-4">
+                <label class="form-label" for="username">Username</label>
+                <input class="form-control form-control-lg mb-3" id="username" name="username" minlength="3" autocomplete="username" required autofocus>
+                <label class="form-label" for="password">Password</label>
+                <input class="form-control form-control-lg mb-3" id="password" name="password" type="password" minlength="6" autocomplete="new-password" required>
+                <label class="form-label" for="confirmation">Confirm password</label>
+                <input class="form-control form-control-lg mb-4" id="confirmation" name="confirmation" type="password" minlength="6" autocomplete="new-password" required>
+                <button class="btn btn-accent btn-lg w-100" type="submit">{% if current_user and current_user.is_guest %}Save profile{% else %}Create account{% endif %}</button>
+            </form>
+            {% if not current_user %}<p class="mt-4 mb-0 text-secondary">Already registered? <a href="{{ url_for('login') }}">Log in</a></p>{% endif %}
+        </div>
+    </div>
+{% endblock %}
