@@ -27,7 +27,15 @@ from werkzeug.security import check_password_hash, generate_password_hash
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "studytrack-development-key")
 app.config["DATABASE"] = os.path.join(app.root_path, "studytrack.db")
+app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(days=365)
+app.config["SESSION_COOKIE_SECURE"] = True
+app.config["SESSION_COOKIE_HTTPONLY"] = True
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 
+
+@app.before_request
+def keep_user_signed_in():
+    session.permanent = True
 
 def get_db():
     """Open one database connection for the current request."""
