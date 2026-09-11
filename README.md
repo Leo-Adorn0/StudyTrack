@@ -1,6 +1,6 @@
 # StudyTrack
 
-#### Video Demo: REPLACE THIS TEXT WITH THE YOUTUBE VIDEO URL
+#### Video Demo: https://youtu.be/pITZsnn12nM
 
 #### Description:
 
